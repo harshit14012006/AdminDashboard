@@ -7,7 +7,7 @@ const Header = () => {
         E-Commerce Admin Dashboard
       </h1>
       <p className="text-sm text-indigo-300">
-        Powered by Harshit
+        Powered by Harshit & Simar
       </p>
     </header>
   );
