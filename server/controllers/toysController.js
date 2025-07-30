@@ -74,3 +74,35 @@ export const updateToy = async (req, res) => {
   }
 };
 
+export const deleteToy = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedToy = await Toy.findByIdAndDelete(id);
+
+    if (!deletedToy) {
+      return res.status(404).json({ message: 'Toy not found' });
+    }
+
+    res.status(200).json({ message: 'Toy deleted successfully' });
+  } catch (error) {
+    console.error('Delete Error:', error.message);
+    res.status(500).json({ message: 'Failed to delete toy' });
+  }
+};
+
+// Get Toy by ID
+export const getToyById = async (req, res) => {
+  try {
+    const toy = await Toy.findById(req.params.id);
+
+    if (!toy) {
+      return res.status(404).json({ message: "Toy not found" });
+    }
+
+    res.status(200).json(toy);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching toy", error: error.message });
+  }
+};
+
