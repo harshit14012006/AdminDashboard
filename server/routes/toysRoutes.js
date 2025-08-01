@@ -5,7 +5,7 @@ import { getAllToys, addToy, getToyById, updateToy, deleteToy  } from '../contro
 const router = express.Router();
 
 router.get('/get-all-toys', getAllToys);
-router.post('/add', upload.single('image'), addToy);
+router.post('/add-toy', upload.single('image'), addToy);
 router.get('/:id', getToyById);
 router.put('/:id', upload.single('image'), updateToy);
 router.delete('/:id', deleteToy);

@@ -53,22 +53,22 @@ const Sidebar = () => {
         <div className="flex items-center gap-3 px-6 py-5 border-b border-indigo-800">
           <FaUserCircle size={32} className="text-indigo-300" />
           <div>
-            <h2 className="text-xl font-semibold text-white">Admin Panel</h2>
-            <p className="text-sm text-indigo-300">Welcome back!</p>
+            <h2 className="text-xl font-semibold text-white">PlayPlates</h2>
+            <p className="text-sm text-indigo-300">Admin Dashboard</p>
           </div>
         </div>
 
         {/* Navigation */}
         <nav className="mt-5 px-4 space-y-2">
-          {navLink('/', FaTachometerAlt, 'Dashboard')}
-          {navLink('/add-toys', FaCubes, 'Add Toys')}
-          {navLink('/add-crockery', FaUtensils, 'Add Crockery')}
-          {navLink('/view-products', FaPlus, 'View Products')}
+          {navLink('/admin-dashboard', FaTachometerAlt, 'Dashboard')}
+          {navLink('/admin-dashboard/add-toys', FaCubes, 'Add Toys')}
+          {navLink('/admin-dashboard/add-crockery', FaUtensils, 'Add Crockery')}
+          {navLink('/admin-dashboard/view-products', FaPlus, 'View Products')}
         </nav>
 
         {/* Footer */}
         <div className="mt-auto px-6 py-4 border-t border-indigo-800 text-sm text-indigo-300">
-          <p>© {new Date().getFullYear()} Admin Panel</p>
+          <p>© {new Date().getFullYear()} PlayPlates</p>
         </div>
       </aside>
 

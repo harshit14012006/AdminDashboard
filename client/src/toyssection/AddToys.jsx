@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import ToysForm from './ToysForm';
 import ToysFilter from './ToysFilter';
 import ToysTable from './ToysTable';
@@ -18,6 +19,20 @@ const AddToys = () => {
   const [editingId, setEditingId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const fetchToys = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/toys/get-all-toys');
+      setProducts(res.data || []);
+    } catch (err) {
+      console.error('Error fetching toys:', err);
+      setProducts([]);
+    }
+  };
+
+  useEffect(() => {
+    fetchToys();
+  }, []);
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === 'images') {
@@ -27,35 +42,36 @@ const AddToys = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const imagePreview = formData.images.length
-      ? URL.createObjectURL(formData.images[0])
-      : 'https://via.placeholder.com/80';
-
-    if (isEditMode) {
-      setProducts((prev) =>
-        prev.map((product) =>
-          product.id === editingId
-            ? {
-                ...product,
-                ...formData,
-                image: formData.images.length ? imagePreview : product.image,
-              }
-            : product
-        )
-      );
-      setIsEditMode(false);
-      setEditingId(null);
-    } else {
-      const newProduct = {
-        id: Date.now(),
-        ...formData,
-        image: imagePreview,
-      };
-      setProducts([...products, newProduct]);
+    const form = new FormData();
+    form.append('name', formData.name);
+    form.append('price', formData.price);
+    form.append('category', formData.category);
+    form.append('ageGroup', formData.ageGroup);
+    form.append('description', formData.description);
+    if (formData.images[0]) {
+      form.append('images', formData.images[0]);
     }
 
+    try {
+      if (isEditMode) {
+        await axios.put(`http://localhost:5000/api/toys/${editingId}`, form, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+      } else {
+        await axios.post('http://localhost:5000/api/toys/add-toy', form, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+      }
+      fetchToys();
+      resetForm();
+    } catch (err) {
+      console.error('❌ Failed to save toy:', err);
+    }
+  };
+
+  const resetForm = () => {
     setFormData({
       name: '',
       price: '',
@@ -64,13 +80,16 @@ const AddToys = () => {
       description: '',
       images: [],
     });
+    setIsEditMode(false);
+    setEditingId(null);
   };
 
-  const handleDelete = (id) => {
-    setProducts(products.filter((p) => p.id !== id));
-    if (editingId === id) {
-      setIsEditMode(false);
-      setEditingId(null);
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/toys/${id}`);
+      fetchToys();
+    } catch (err) {
+      console.error('❌ Failed to delete toy:', err);
     }
   };
 
@@ -84,10 +103,10 @@ const AddToys = () => {
       images: [],
     });
     setIsEditMode(true);
-    setEditingId(product.id);
+    setEditingId(product._id);
   };
 
-  const filteredProducts = products.filter((product) =>
+  const filteredProducts = (products || []).filter((product) =>
     [product.name, product.category, product.ageGroup]
       .join(' ')
       .toLowerCase()
