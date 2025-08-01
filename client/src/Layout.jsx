@@ -8,7 +8,7 @@ const Layout = () => {
     <div className="flex min-h-screen">
       <Sidebar />
       <div className="flex-1 bg-gray-100">
-        <Header />
+        <Header/>
         <main className="p-4">
           <Outlet /> {/* This will show nested route's component */}
         </main>
