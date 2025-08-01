@@ -3,8 +3,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import toysRoutes from './routes/toysRoutes.js'; 
-import crockeryRoutes from './routes/crockeryRoutes.js'; 
-import authRoutes from './routes/authRoutes.js';
+import crockeryRoutes from './routes/crockeryRoutes.js';
 
 dotenv.config();
 
@@ -33,7 +32,6 @@ const connectDB = async () => {
 // Routes
 app.use('/api/toys', toysRoutes);
 app.use('/api/crockery', crockeryRoutes);
-app.use('/api', authRoutes);
 
 // Default route
 app.get('/', (req, res) => {
