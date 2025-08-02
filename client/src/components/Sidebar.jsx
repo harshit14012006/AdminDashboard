@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   FaTachometerAlt,
   FaPlus,
@@ -8,28 +8,35 @@ import {
   FaUserCircle,
   FaBars,
   FaTimes,
+  FaSignOutAlt,
 } from 'react-icons/fa';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const navLink = (to, Icon, label) => {
     const isActive = location.pathname === to;
     return (
       <Link
         to={to}
-        className={`flex items-center gap-3 px-5 py-3 rounded-lg font-medium text-sm transition-all duration-200 ${
-          isActive
-            ? 'bg-indigo-700 text-white shadow-md'
-            : 'text-gray-300 hover:bg-indigo-600 hover:text-white'
-        }`}
+        className={`flex items-center gap-3 px-5 py-3 rounded-lg font-medium text-sm transition-all duration-200 ${isActive
+          ? 'bg-indigo-700 text-white shadow-md'
+          : 'text-gray-300 hover:bg-indigo-600 hover:text-white'
+          }`}
         onClick={() => setIsOpen(false)}
       >
         <Icon className={`text-base ${isActive ? 'text-white' : 'text-indigo-300'}`} />
         <span>{label}</span>
       </Link>
     );
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('user');
+    navigate('/');
   };
 
   return (
@@ -64,7 +71,19 @@ const Sidebar = () => {
           {navLink('/admin-dashboard/add-toys', FaCubes, 'Add Toys')}
           {navLink('/admin-dashboard/add-crockery', FaUtensils, 'Add Crockery')}
           {navLink('/admin-dashboard/view-products', FaPlus, 'View Products')}
+          {navLink('/admin-dashboard/settings', FaUserCircle, 'Settings')}
         </nav>
+
+        {/* Logout Button */}
+        <div className="px-4 mt-4">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-5 py-3 rounded-lg font-medium text-sm text-gray-300 hover:bg-red-600 hover:text-white transition-all duration-200"
+          >
+            <FaSignOutAlt className="text-base text-red-400" />
+            <span>Logout</span>
+          </button>
+        </div>
 
         {/* Footer */}
         <div className="mt-auto px-6 py-4 border-t border-indigo-800 text-sm text-indigo-300">

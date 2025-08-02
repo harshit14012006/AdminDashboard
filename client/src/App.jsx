@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import AddToys from './toyssection/AddToys';
 import AddCrockery from './crockerysection/AddCrockery';
 import ViewProducts from './pages/ViewProducts';
+import Settings from './pages/Settings';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/admin-dashboard/add-toys" element={<AddToys />} />
         <Route path="/admin-dashboard/add-crockery" element={<AddCrockery />} />
         <Route path="/admin-dashboard/view-products" element={<ViewProducts />} />
+        <Route path="/admin-dashboard/settings" element={<Settings />} />
       </Route>
     </Routes>
   );

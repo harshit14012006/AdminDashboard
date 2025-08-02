@@ -1,9 +1,14 @@
+// src/pages/Login.jsx
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Login = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({ username: '', password: '', remember: false });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -13,17 +18,29 @@ const Login = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        setError('');
+
         const { username, password } = formData;
 
-        // Admin credentials
-        if (username === 'admin@playplates.com' && password === 'harshit14012006') {
-            alert('Login successful!');
-            localStorage.setItem('user', JSON.stringify({ username, role: 'admin' }));
-            navigate('/admin-dashboard');
-        } else {
-            alert('Invalid credentials!');
+        try {
+            const res = await axios.post('http://localhost:5000/api/admin/login', {
+                email: username,
+                password,
+            });
+
+            if (res.status === 200) {
+                alert('Login successful!');
+                localStorage.setItem('adminToken', res.data.token); // ✅ Store JWT
+                localStorage.setItem('user', JSON.stringify(res.data.admin)); // Optional: Admin data
+                navigate('/admin-dashboard');
+            }
+        } catch (err) {
+            setError(err.response?.data?.message || 'Login failed');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -51,7 +68,7 @@ const Login = () => {
 
                     <div className="p-6 pt-0">
                         <form onSubmit={handleSubmit}>
-                            {/* Username */}
+                            {/* Email */}
                             <div className="group relative rounded-lg border focus-within:border-sky-200 px-3 pb-1.5 pt-2.5 duration-200 focus-within:ring focus-within:ring-sky-300/30">
                                 <div className="flex justify-between">
                                     <label className="text-xs font-medium text-gray-400 group-focus-within:text-white">
@@ -69,23 +86,22 @@ const Login = () => {
                                     )}
                                 </div>
                                 <input
-                                    type="text"
+                                    type="email"
                                     name="username"
                                     value={formData.username}
                                     onChange={handleChange}
                                     placeholder="admin@playplates.com"
                                     autoComplete="off"
                                     className="block w-full border-0 bg-transparent p-0 text-sm text-white placeholder:text-white/60 focus:outline-none focus:ring-0 sm:leading-7"
+                                    required
                                 />
                             </div>
 
                             {/* Password */}
                             <div className="mt-4 group relative rounded-lg border focus-within:border-sky-200 px-3 pb-1.5 pt-2.5 duration-200 focus-within:ring focus-within:ring-sky-300/30">
-                                <div className="flex justify-between">
-                                    <label className="text-xs font-medium text-gray-400 group-focus-within:text-white">
-                                        Password
-                                    </label>
-                                </div>
+                                <label className="text-xs font-medium text-gray-400 group-focus-within:text-white">
+                                    Password
+                                </label>
                                 <input
                                     type="password"
                                     name="password"
@@ -93,10 +109,11 @@ const Login = () => {
                                     onChange={handleChange}
                                     placeholder="••••••••"
                                     className="block w-full border-0 bg-transparent p-0 text-sm text-white placeholder:text-white/60 focus:outline-none focus:ring-0 sm:leading-7"
+                                    required
                                 />
                             </div>
 
-                            {/* Remember + Links */}
+                            {/* Remember + Submit */}
                             <div className="mt-4 flex items-center justify-between">
                                 <label className="flex items-center gap-2 text-xs">
                                     <input
@@ -110,11 +127,19 @@ const Login = () => {
                                 </label>
                                 <button
                                     type="submit"
+                                    disabled={loading}
                                     className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-all hover:bg-white/10 hover:ring hover:ring-white h-10 px-4 py-2 duration-200"
                                 >
-                                    Log in
+                                    {loading ? 'Logging in...' : 'Log in'}
                                 </button>
                             </div>
+
+                            {/* Error message */}
+                            {error && (
+                                <p className="mt-4 text-sm text-red-400 text-center">
+                                    {error}
+                                </p>
+                            )}
                         </form>
                     </div>
                 </div>
