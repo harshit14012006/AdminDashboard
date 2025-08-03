@@ -21,7 +21,7 @@ const AddToys = () => {
 
   const fetchToys = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/toys/get-all-toys');
+      const res = await axios.get('https://admindashboard-fgmu.onrender.com/api/toys/get-all-toys');
       setProducts(res.data || []);
     } catch (err) {
       console.error('Error fetching toys:', err);
@@ -56,11 +56,11 @@ const AddToys = () => {
 
     try {
       if (isEditMode) {
-        await axios.put(`http://localhost:5000/api/toys/${editingId}`, form, {
+        await axios.put(`https://admindashboard-fgmu.onrender.com/api/toys/${editingId}`, form, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       } else {
-        await axios.post('http://localhost:5000/api/toys/add-toy', form, {
+        await axios.post('https://admindashboard-fgmu.onrender.com/api/toys/add-toy', form, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       }
@@ -86,7 +86,7 @@ const AddToys = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/toys/${id}`);
+      await axios.delete(`https://admindashboard-fgmu.onrender.com/api/toys/${id}`);
       fetchToys();
     } catch (err) {
       console.error('❌ Failed to delete toy:', err);

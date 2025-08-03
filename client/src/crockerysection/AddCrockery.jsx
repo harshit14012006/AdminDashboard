@@ -23,7 +23,7 @@ const AddCrockery = () => {
   // ✅ Fetch crockery data from backend
   const fetchCrockery = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/crockery/get-all-crockery');
+      const res = await axios.get('https://admindashboard-fgmu.onrender.com/api/crockery/get-all-crockery');
       setProducts(res.data || []); // fallback to empty array
     } catch (error) {
       console.error('Error fetching crockery:', error);
@@ -59,11 +59,11 @@ const AddCrockery = () => {
 
     try {
       if (isEditMode) {
-        await axios.put(`http://localhost:5000/api/crockery/update-crockery/${editingId}`, form, {
+        await axios.put(`https://admindashboard-fgmu.onrender.com/api/crockery/update-crockery/${editingId}`, form, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       } else {
-        await axios.post('http://localhost:5000/api/crockery/add-crockery', form, {
+        await axios.post('https://admindashboard-fgmu.onrender.com/api/crockery/add-crockery', form, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       }
@@ -91,7 +91,7 @@ const AddCrockery = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/crockery/delete-crockery/${id}`);
+      await axios.delete(`https://admindashboard-fgmu.onrender.com/api/crockery/delete-crockery/${id}`);
       fetchCrockery();
     } catch (error) {
       console.error('❌ Failed to delete crockery:', error);

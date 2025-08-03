@@ -17,7 +17,7 @@ const Settings = () => {
       const token = localStorage.getItem('adminToken');
 
       const response = await axios.put(
-        'http://localhost:5000/api/admin/update',
+        'https://admindashboard-fgmu.onrender.com/api/admin/update',
         { email, phone, password },
         {
           headers: {
