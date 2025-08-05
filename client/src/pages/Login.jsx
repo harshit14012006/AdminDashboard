@@ -25,7 +25,7 @@ const Login = () => {
         const { username, password } = formData;
 
         try {
-            const res = await axios.post('https://admindashboard-fgmu.onrender.com/api/admin/login', {
+            const res = await axios.post('https://playplatesadmindashboardbackend.onrender.com/api/admin/login', {
                 email: username,
                 password,
             });

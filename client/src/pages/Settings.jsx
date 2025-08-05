@@ -17,7 +17,7 @@ const Settings = () => {
       const token = localStorage.getItem('adminToken');
 
       const response = await axios.put(
-        'https://admindashboard-fgmu.onrender.com/api/admin/update',
+        'https://playplatesadmindashboardbackend.onrender.com/api/admin/update',
         { email, phone, password },
         {
           headers: {
