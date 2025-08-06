@@ -10,21 +10,57 @@ const ToysForm = ({ formData, handleChange, handleSubmit, isEditMode }) => {
             <form onSubmit={handleSubmit} className="grid gap-6 md:grid-cols-2">
                 <InputField label="Toy Name" name="name" value={formData.name} handleChange={handleChange} />
                 <InputField label="Price (₹)" name="price" type="number" value={formData.price} handleChange={handleChange} />
-
                 <SelectField
                     label="Category"
                     name="category"
                     value={formData.category}
                     handleChange={handleChange}
-                    options={['Soft Toys', 'Educational', 'Action Figures', 'Puzzles', 'Outdoor']}
+                    options={[
+                        'Soft Toys',
+                        'Educational',
+                        'Action Figures',
+                        'Puzzles',
+                        'Outdoor',
+                        'Vehicles & Remote Control',
+                        'Building Blocks',
+                        'Musical Toys',
+                        'Arts & Crafts',
+                        'Board Games',
+                        'Dolls & Dollhouses',
+                        'Role Play & Pretend Play',
+                        'STEM Toys',
+                        'Electronic Toys',
+                        'Bath Toys',
+                        'Sports & Outdoor Games',
+                        'Plush Toys',
+                        'Infant Toys',
+                        'Science Kits',
+                        'Construction Toys',
+                        'Magic Sets',
+                        'Learning Tablets',
+                        'Wooden Toys',
+                        'Toy Guns & Blasters',
+                        'Die-Cast & Collectibles'
+                    ]}
                 />
-
                 <SelectField
                     label="Age Group"
                     name="ageGroup"
                     value={formData.ageGroup}
                     handleChange={handleChange}
-                    options={['0-2 years', '3-5 years', '6-8 years', '9+ years']}
+                    options={[
+                        '0-6 months',
+                        '6-12 months',
+                        '1-2 years',
+                        '2-3 years',
+                        '3-5 years',
+                        '5-7 years',
+                        '6-8 years',
+                        '8-10 years',
+                        '10-12 years',
+                        '12+ years',
+                        'Teens & Adults'
+                    ]}
                 />
 
                 <div className="md:col-span-2">

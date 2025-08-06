@@ -47,8 +47,20 @@ const CrockeryForm = ({ formData, handleChange, handleSubmit, isEditMode }) => {
             <option value="Plates">Plates</option>
             <option value="Bowls">Bowls</option>
             <option value="Cups">Cups</option>
+            <option value="Mugs">Mugs</option>
             <option value="Glasses">Glasses</option>
             <option value="Cutlery">Cutlery</option>
+            <option value="Serving Dishes">Serving Dishes</option>
+            <option value="Trays">Trays</option>
+            <option value="Jugs & Pitchers">Jugs & Pitchers</option>
+            <option value="Tea Sets">Tea Sets</option>
+            <option value="Dinner Sets">Dinner Sets</option>
+            <option value="Tureens">Tureens</option>
+            <option value="Condiment Sets">Condiment Sets</option>
+            <option value="Soup Bowls">Soup Bowls</option>
+            <option value="Side Plates">Side Plates</option>
+            <option value="Salad Bowls">Salad Bowls</option>
+            <option value="Saucers">Saucers</option>
           </select>
         </div>
 
@@ -63,9 +75,18 @@ const CrockeryForm = ({ formData, handleChange, handleSubmit, isEditMode }) => {
           >
             <option value="">Select material</option>
             <option value="Ceramic">Ceramic</option>
+            <option value="Porcelain">Porcelain</option>
+            <option value="Bone China">Bone China</option>
+            <option value="Melamine">Melamine</option>
             <option value="Glass">Glass</option>
-            <option value="Steel">Steel</option>
+            <option value="Tempered Glass">Tempered Glass</option>
+            <option value="Steel">Stainless Steel</option>
             <option value="Plastic">Plastic</option>
+            <option value="Bamboo">Bamboo</option>
+            <option value="Wood">Wood</option>
+            <option value="Copper">Copper</option>
+            <option value="Clay/Terracotta">Clay / Terracotta</option>
+            <option value="Stoneware">Stoneware</option>
             <option value="Other">Other</option>
           </select>
         </div>
@@ -100,7 +121,7 @@ const CrockeryForm = ({ formData, handleChange, handleSubmit, isEditMode }) => {
         <div className="md:col-span-2 text-center">
           <button
             type="submit"
-                
+
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition cursor-pointer"
           >
             {isEditMode ? 'Update Crockery' : 'Add Crockery'}
