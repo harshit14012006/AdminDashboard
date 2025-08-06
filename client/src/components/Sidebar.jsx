@@ -9,10 +9,12 @@ import {
   FaBars,
   FaTimes,
   FaSignOutAlt,
+  FaChevronRight,
 } from 'react-icons/fa';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -21,14 +23,21 @@ const Sidebar = () => {
     return (
       <Link
         to={to}
-        className={`flex items-center gap-3 px-5 py-3 rounded-lg font-medium text-sm transition-all duration-200 ${isActive
-          ? 'bg-indigo-700 text-white shadow-md'
-          : 'text-gray-300 hover:bg-indigo-600 hover:text-white'
+        className={`flex items-center justify-between gap-3 px-5 py-3 rounded-lg font-medium text-sm transition-all duration-300 ${isActive
+          ? 'bg-white/10 text-white shadow-lg'
+          : 'text-gray-300 hover:bg-white/5 hover:text-white'
           }`}
         onClick={() => setIsOpen(false)}
+        onMouseEnter={() => setHoveredItem(label)}
+        onMouseLeave={() => setHoveredItem(null)}
       >
-        <Icon className={`text-base ${isActive ? 'text-white' : 'text-indigo-300'}`} />
-        <span>{label}</span>
+        <div className="flex items-center gap-3">
+          <Icon className={`text-lg ${isActive ? 'text-indigo-300' : 'text-gray-400'}`} />
+          <span>{label}</span>
+        </div>
+        {(hoveredItem === label || isActive) && (
+          <FaChevronRight className="text-xs text-indigo-300 animate-pulse" />
+        )}
       </Link>
     );
   };
@@ -41,10 +50,10 @@ const Sidebar = () => {
 
   return (
     <div>
-      {/* Hamburger Button */}
+      {/* Mobile Menu Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden fixed top-4 right-4 z-50 bg-indigo-900 text-white p-2 rounded-full shadow-md border border-indigo-700"
+        className="md:hidden fixed top-4 right-4 z-50 bg-indigo-700/90 text-white p-3 rounded-lg shadow-lg backdrop-blur-sm border border-white/10 hover:bg-indigo-600 transition-all duration-300"
         aria-label="Toggle Sidebar"
       >
         {isOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
@@ -52,21 +61,24 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-indigo-900 to-blue-900 shadow-xl border-r border-indigo-800 z-40 transform transition-transform duration-300 ease-in-out
+        className={`fixed top-0 left-0 h-full w-72 bg-gradient-to-b from-gray-900 to-gray-800 shadow-2xl border-r border-white/5 z-40 transform transition-all duration-300 ease-in-out
         ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
         md:translate-x-0 md:static md:flex flex-col justify-between`}
       >
         {/* Header */}
-        <div className="flex items-center gap-3 px-6 py-5 border-b border-indigo-800">
-          <FaUserCircle size={32} className="text-indigo-300" />
+        <div className="flex items-center gap-3 px-6 py-5 border-b border-white/10">
+          <div className="relative">
+            <FaUserCircle size={36} className="text-indigo-400/80" />
+            <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-gray-800"></span>
+          </div>
           <div>
-            <h2 className="text-xl font-semibold text-white">PlayPlates</h2>
-            <p className="text-sm text-indigo-300">Admin Dashboard</p>
+            <h2 className="text-xl font-bold text-white tracking-tight">PlayPlates</h2>
+            <p className="text-xs text-gray-400 font-medium">Admin Dashboard</p>
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="mt-5 px-4 space-y-2">
+        <nav className="mt-6 px-4 space-y-1.5">
           {navLink('/admin-dashboard', FaTachometerAlt, 'Dashboard')}
           {navLink('/admin-dashboard/add-toys', FaCubes, 'Add Toys')}
           {navLink('/admin-dashboard/add-crockery', FaUtensils, 'Add Crockery')}
@@ -75,24 +87,28 @@ const Sidebar = () => {
         </nav>
 
         {/* Logout Button */}
-        <div className="px-4 mt-4">
+        <div className="px-4 mt-4 mb-6">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-5 py-3 rounded-lg font-medium text-sm text-gray-300 hover:bg-red-600 hover:text-white transition-all duration-200"
+            className="w-full flex items-center gap-3 px-5 py-3 rounded-lg font-medium text-sm text-gray-300 hover:bg-red-600/20 hover:text-white transition-all duration-300 group border border-white/5 hover:border-red-500/30"
           >
-            <FaSignOutAlt className="text-base text-red-400" />
+            <div className="relative">
+              <FaSignOutAlt className="text-base text-red-400 group-hover:scale-110 transition-transform" />
+              <span className="absolute inset-0 bg-red-500 rounded-full opacity-0 group-hover:opacity-10 transition-opacity"></span>
+            </div>
             <span>Logout</span>
           </button>
         </div>
 
         {/* Footer */}
-        <div className="mt-auto px-6 py-4 border-t border-indigo-800 text-sm text-indigo-300">
-          <p>© {new Date().getFullYear()} PlayPlates</p>
+        <div className="mt-auto px-6 py-4 border-t border-white/5 text-xs text-gray-500">
+          <p className="font-medium">v2.1.0</p>
+          <p>© {new Date().getFullYear()} PlayPlates Inc.</p>
         </div>
       </aside>
 
       {/* Layout spacer */}
-      <div className="hidden md:block md:ml-64" />
+      <div className="hidden md:block md:ml-72" />
     </div>
   );
 };
