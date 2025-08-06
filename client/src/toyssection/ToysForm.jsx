@@ -1,15 +1,43 @@
 import React from 'react';
+import { FiPackage, FiDollarSign, FiTag, FiUser, FiEdit2, FiImage, FiX, FiCheck } from 'react-icons/fi';
 
-const ToysForm = ({ formData, handleChange, handleSubmit, isEditMode }) => {
+const ToysForm = ({ formData, handleChange, handleSubmit, isEditMode, isLoading, onCancel }) => {
     return (
-        <div className="bg-white shadow-xl rounded-2xl p-4 sm:p-6 md:p-8 w-full max-w-5xl mx-auto mb-12">
-            <h2 className="text-2xl sm:text-3xl font-semibold text-center text-pink-600 mb-6 sm:mb-8">
-                {isEditMode ? 'Update Toy' : 'Add New Toy'}
-            </h2>
+        <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
+                <h2 className="text-lg font-semibold text-gray-800 flex items-center">
+                    {isEditMode ? (
+                        <>
+                            <FiEdit2 className="mr-2 text-indigo-600" />
+                            Edit Toy Product
+                        </>
+                    ) : (
+                        <>
+                            <FiPackage className="mr-2 text-indigo-600" />
+                            Add New Toy Product
+                        </>
+                    )}
+                </h2>
+            </div>
 
-            <form onSubmit={handleSubmit} className="grid gap-6 md:grid-cols-2">
-                <InputField label="Toy Name" name="name" value={formData.name} handleChange={handleChange} />
-                <InputField label="Price (₹)" name="price" type="number" value={formData.price} handleChange={handleChange} />
+            <form onSubmit={handleSubmit} className="p-6 grid gap-6 md:grid-cols-2">
+                <InputField 
+                    label="Product Name" 
+                    name="name" 
+                    value={formData.name} 
+                    handleChange={handleChange} 
+                    icon={<FiPackage className="text-gray-400" />}
+                />
+                
+                <InputField 
+                    label="Price (₹)" 
+                    name="price" 
+                    type="number" 
+                    value={formData.price} 
+                    handleChange={handleChange}
+                    icon={<FiDollarSign className="text-gray-400" />}
+                />
+                
                 <SelectField
                     label="Category"
                     name="category"
@@ -42,7 +70,9 @@ const ToysForm = ({ formData, handleChange, handleSubmit, isEditMode }) => {
                         'Toy Guns & Blasters',
                         'Die-Cast & Collectibles'
                     ]}
+                    icon={<FiTag className="text-gray-400" />}
                 />
+                
                 <SelectField
                     label="Age Group"
                     name="ageGroup"
@@ -61,42 +91,103 @@ const ToysForm = ({ formData, handleChange, handleSubmit, isEditMode }) => {
                         '12+ years',
                         'Teens & Adults'
                     ]}
+                    icon={<FiUser className="text-gray-400" />}
                 />
 
                 <div className="md:col-span-2">
-                    <label className="block text-sm font-medium mb-1">Description</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                        <FiEdit2 className="mr-2 text-gray-400" />
+                        Product Description
+                    </label>
                     <textarea
                         name="description"
-                        rows="3"
+                        rows={4}
                         value={formData.description}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150"
                         required
                     />
                 </div>
 
                 <div className="md:col-span-2">
-                    <label className="block text-sm font-medium mb-1">Upload Image</label>
-                    <input
-                        type="file"
-                        name="image"
-                        accept="image/*"
-                        multiple
-                        onChange={handleChange}
-                        className="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-white file:mr-4 file:py-2 file:px-4
-                       file:rounded-lg file:border-0 file:text-sm file:font-semibold
-                       file:bg-pink-50
-                       file:text-pink-700 hover:file:bg-pink-100 focus:outline-none focus:ring-2 focus:ring-pink-500 h-9"
-                        required={!isEditMode}
-                    />
+                    <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                        <FiImage className="mr-2 text-gray-400" />
+                        Product Images
+                    </label>
+                    <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                        <div className="space-y-1 text-center">
+                            <svg
+                                className="mx-auto h-12 w-12 text-gray-400"
+                                stroke="currentColor"
+                                fill="none"
+                                viewBox="0 0 48 48"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                                    strokeWidth={2}
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
+                            </svg>
+                            <div className="flex text-sm text-gray-600">
+                                <label
+                                    htmlFor="file-upload"
+                                    className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                                >
+                                    <span>Upload files</span>
+                                    <input
+                                        id="file-upload"
+                                        name="image"
+                                        type="file"
+                                        className="sr-only"
+                                        onChange={handleChange}
+                                        accept="image/*"
+                                        multiple
+                                        required={!isEditMode}
+                                    />
+                                </label>
+                                <p className="pl-1">or drag and drop</p>
+                            </div>
+                            <p className="text-xs text-gray-500">
+                                PNG, JPG, GIF up to 5MB
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="md:col-span-2 text-center">
+                <div className="md:col-span-2 flex justify-end space-x-3 pt-2">
+                    {isEditMode && (
+                        <button
+                            type="button"
+                            onClick={onCancel}
+                            className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150"
+                        >
+                            <FiX className="mr-2" />
+                            Cancel
+                        </button>
+                    )}
                     <button
                         type="submit"
-                        className="bg-pink-600 hover:bg-pink-700 text-white font-semibold py-3 px-6 rounded-lg transition"
+                        disabled={isLoading}
+                        className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ${
+                            isLoading ? 'bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700'
+                        }`}
                     >
-                        {isEditMode ? 'Update Toy' : 'Add Toy'}
+                        {isLoading ? (
+                            <>
+                                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Processing...
+                            </>
+                        ) : (
+                            <>
+                                <FiCheck className="mr-2" />
+                                {isEditMode ? 'Update Product' : 'Add Product'}
+                            </>
+                        )}
                     </button>
                 </div>
             </form>
@@ -104,39 +195,62 @@ const ToysForm = ({ formData, handleChange, handleSubmit, isEditMode }) => {
     );
 };
 
-// 👇 Fixed InputField (with capital name)
-const InputField = ({ label, name, value, handleChange, type = 'text' }) => (
+const InputField = ({ label, name, value, handleChange, type = 'text', icon }) => (
     <div>
-        <label className="block text-sm font-medium mb-1">{label}</label>
-        <input
-            type={type}
-            name={name}
-            value={value}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none"
-            required
-        />
+        <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
+            {label}
+        </label>
+        <div className="mt-1 relative rounded-md shadow-sm">
+            {icon && (
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    {icon}
+                </div>
+            )}
+            <input
+                type={type}
+                name={name}
+                id={name}
+                value={value}
+                onChange={handleChange}
+                className={`block w-full ${icon ? 'pl-10' : 'pl-3'} pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150`}
+                required
+            />
+        </div>
     </div>
 );
 
-// 👇 Fixed SelectField (with capital name)
-const SelectField = ({ label, name, value, handleChange, options }) => (
+const SelectField = ({ label, name, value, handleChange, options, icon }) => (
     <div>
-        <label className="block text-sm font-medium mb-1">{label}</label>
-        <select
-            name={name}
-            value={value}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 bg-white outline-none"
-            required
-        >
-            <option value="">Select {label.toLowerCase()}</option>
-            {options.map((opt) => (
-                <option key={opt} value={opt}>
-                    {opt}
-                </option>
-            ))}
-        </select>
+        <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
+            {label}
+        </label>
+        <div className="mt-1 relative rounded-md shadow-sm">
+            {icon && (
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    {icon}
+                </div>
+            )}
+            <select
+                name={name}
+                id={name}
+                value={value}
+                onChange={handleChange}
+                className={`block w-full ${icon ? 'pl-10' : 'pl-3'} pr-10 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 appearance-none bg-white`}
+                required
+            >
+                <option value="">Select {label.toLowerCase()}</option>
+                {options.map((opt) => (
+                    <option key={opt} value={opt}>
+                        {opt}
+                    </option>
+                ))}
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+            </div>
+        </div>
     </div>
 );
 
