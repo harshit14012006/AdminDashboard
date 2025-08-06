@@ -40,10 +40,10 @@ const ToysForm = ({ formData, handleChange, handleSubmit, isEditMode }) => {
                 </div>
 
                 <div className="md:col-span-2">
-                    <label className="block text-sm font-medium mb-1">Upload Images</label>
+                    <label className="block text-sm font-medium mb-1">Upload Image</label>
                     <input
                         type="file"
-                        name="images"
+                        name="image"
                         accept="image/*"
                         multiple
                         onChange={handleChange}
