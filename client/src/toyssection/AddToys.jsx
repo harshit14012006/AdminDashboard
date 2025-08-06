@@ -11,7 +11,7 @@ const AddToys = () => {
     category: '',
     ageGroup: '',
     description: '',
-    images: [],
+    image: [],
   });
 
   const [products, setProducts] = useState([]);
@@ -35,8 +35,8 @@ const AddToys = () => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === 'images') {
-      setFormData({ ...formData, images: Array.from(files) });
+    if (name === 'image') {
+      setFormData({ ...formData, image: Array.from(files) });
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -50,8 +50,8 @@ const AddToys = () => {
     form.append('category', formData.category);
     form.append('ageGroup', formData.ageGroup);
     form.append('description', formData.description);
-    if (formData.images[0]) {
-      form.append('images', formData.images[0]);
+    if (formData.image[0]) {
+      form.append('image', formData.image[0]);
     }
 
     try {
@@ -78,7 +78,7 @@ const AddToys = () => {
       category: '',
       ageGroup: '',
       description: '',
-      images: [],
+      image: [],
     });
     setIsEditMode(false);
     setEditingId(null);
@@ -100,7 +100,7 @@ const AddToys = () => {
       category: product.category,
       ageGroup: product.ageGroup,
       description: product.description,
-      images: [],
+      image: [],
     });
     setIsEditMode(true);
     setEditingId(product._id);
