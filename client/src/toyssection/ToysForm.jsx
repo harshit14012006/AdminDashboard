@@ -1,7 +1,27 @@
-import React from 'react';
-import { FiPackage, FiDollarSign, FiTag, FiUser, FiEdit2, FiImage, FiX, FiCheck } from 'react-icons/fi';
+import React, { useState, useRef, useEffect } from 'react';
+import {
+    FiPackage, FiDollarSign, FiTag, FiUser,
+    FiEdit2, FiImage, FiX, FiCheck
+} from 'react-icons/fi';
 
-const ToysForm = ({ formData, handleChange, handleSubmit, isEditMode, isLoading, onCancel }) => {
+const ToysForm = ({ formData, handleChange, handleSubmit, isEditMode, isLoading, onCancel, resetTrigger }) => {
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const fileInputRef = useRef();
+
+    const handleFileChange = (e) => {
+        const files = Array.from(e.target.files);
+        setSelectedFiles(files);
+        handleChange(e); // propagate to parent
+    };
+
+    // ✅ Reset file input & selected files when resetTrigger changes
+    useEffect(() => {
+        if (resetTrigger && fileInputRef.current) {
+            fileInputRef.current.value = '';        // clears file input
+            setSelectedFiles([]);                   // clears UI preview
+        }
+    }, [resetTrigger]);
+
     return (
         <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
@@ -21,75 +41,48 @@ const ToysForm = ({ formData, handleChange, handleSubmit, isEditMode, isLoading,
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 grid gap-6 md:grid-cols-2">
-                <InputField 
-                    label="Product Name" 
-                    name="name" 
-                    value={formData.name} 
-                    handleChange={handleChange} 
+                <InputField
+                    label="Toy Name"
+                    name="name"
+                    value={formData.name}
+                    handleChange={handleChange}
                     icon={<FiPackage className="text-gray-400" />}
                 />
-                
-                <InputField 
-                    label="Price (₹)" 
-                    name="price" 
-                    type="number" 
-                    value={formData.price} 
+
+                <InputField
+                    label="Price (₹)"
+                    name="price"
+                    type="number"
+                    value={formData.price}
                     handleChange={handleChange}
                     icon={<FiDollarSign className="text-gray-400" />}
                 />
-                
+
                 <SelectField
                     label="Category"
                     name="category"
                     value={formData.category}
                     handleChange={handleChange}
                     options={[
-                        'Soft Toys',
-                        'Educational',
-                        'Action Figures',
-                        'Puzzles',
-                        'Outdoor',
-                        'Vehicles & Remote Control',
-                        'Building Blocks',
-                        'Musical Toys',
-                        'Arts & Crafts',
-                        'Board Games',
-                        'Dolls & Dollhouses',
-                        'Role Play & Pretend Play',
-                        'STEM Toys',
-                        'Electronic Toys',
-                        'Bath Toys',
-                        'Sports & Outdoor Games',
-                        'Plush Toys',
-                        'Infant Toys',
-                        'Science Kits',
-                        'Construction Toys',
-                        'Magic Sets',
-                        'Learning Tablets',
-                        'Wooden Toys',
-                        'Toy Guns & Blasters',
+                        'Soft Toys', 'Educational', 'Action Figures', 'Puzzles', 'Outdoor',
+                        'Vehicles & Remote Control', 'Building Blocks', 'Musical Toys',
+                        'Arts & Crafts', 'Board Games', 'Dolls & Dollhouses', 'Role Play & Pretend Play',
+                        'STEM Toys', 'Electronic Toys', 'Bath Toys', 'Sports & Outdoor Games',
+                        'Plush Toys', 'Infant Toys', 'Science Kits', 'Construction Toys',
+                        'Magic Sets', 'Learning Tablets', 'Wooden Toys', 'Toy Guns & Blasters',
                         'Die-Cast & Collectibles'
                     ]}
                     icon={<FiTag className="text-gray-400" />}
                 />
-                
+
                 <SelectField
                     label="Age Group"
                     name="ageGroup"
                     value={formData.ageGroup}
                     handleChange={handleChange}
                     options={[
-                        '0-6 months',
-                        '6-12 months',
-                        '1-2 years',
-                        '2-3 years',
-                        '3-5 years',
-                        '5-7 years',
-                        '6-8 years',
-                        '8-10 years',
-                        '10-12 years',
-                        '12+ years',
-                        'Teens & Adults'
+                        '0-6 months', '6-12 months', '1-2 years', '2-3 years', '3-5 years',
+                        '5-7 years', '6-8 years', '8-10 years', '10-12 years', '12+ years', 'Teens & Adults'
                     ]}
                     icon={<FiUser className="text-gray-400" />}
                 />
@@ -97,7 +90,7 @@ const ToysForm = ({ formData, handleChange, handleSubmit, isEditMode, isLoading,
                 <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
                         <FiEdit2 className="mr-2 text-gray-400" />
-                        Product Description
+                        Toy Description
                     </label>
                     <textarea
                         name="description"
@@ -112,7 +105,7 @@ const ToysForm = ({ formData, handleChange, handleSubmit, isEditMode, isLoading,
                 <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
                         <FiImage className="mr-2 text-gray-400" />
-                        Product Images
+                        Toy Images
                     </label>
                     <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                         <div className="space-y-1 text-center">
@@ -141,17 +134,28 @@ const ToysForm = ({ formData, handleChange, handleSubmit, isEditMode, isLoading,
                                         name="image"
                                         type="file"
                                         className="sr-only"
-                                        onChange={handleChange}
+                                        onChange={handleFileChange}
                                         accept="image/*"
                                         multiple
                                         required={!isEditMode}
+                                        ref={fileInputRef} // <-- assign the ref here
                                     />
                                 </label>
                                 <p className="pl-1">or drag and drop</p>
                             </div>
-                            <p className="text-xs text-gray-500">
-                                PNG, JPG, GIF up to 5MB
-                            </p>
+                            <p className="text-xs text-gray-500">PNG, JPG up to 5MB</p>
+
+                            {/* ✅ Show selected file names */}
+                            {selectedFiles.length > 0 && (
+                                <div className="mt-2 text-sm text-gray-700 text-left">
+                                    <strong>Selected Files:</strong>
+                                    <ul className="list-disc list-inside mt-1">
+                                        {selectedFiles.map((file, index) => (
+                                            <li key={index}>{file.name}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -170,9 +174,8 @@ const ToysForm = ({ formData, handleChange, handleSubmit, isEditMode, isLoading,
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ${
-                            isLoading ? 'bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700'
-                        }`}
+                        className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ${isLoading ? 'bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700'
+                            }`}
                     >
                         {isLoading ? (
                             <>
@@ -201,11 +204,7 @@ const InputField = ({ label, name, value, handleChange, type = 'text', icon }) =
             {label}
         </label>
         <div className="mt-1 relative rounded-md shadow-sm">
-            {icon && (
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    {icon}
-                </div>
-            )}
+            {icon && <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">{icon}</div>}
             <input
                 type={type}
                 name={name}
@@ -225,11 +224,7 @@ const SelectField = ({ label, name, value, handleChange, options, icon }) => (
             {label}
         </label>
         <div className="mt-1 relative rounded-md shadow-sm">
-            {icon && (
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    {icon}
-                </div>
-            )}
+            {icon && <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">{icon}</div>}
             <select
                 name={name}
                 id={name}

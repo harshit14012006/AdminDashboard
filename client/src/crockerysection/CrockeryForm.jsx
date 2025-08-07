@@ -1,135 +1,276 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import {
+  FiPackage,
+  FiDollarSign,
+  FiTag,
+  FiEdit2,
+  FiImage,
+  FiX,
+  FiCheck
+} from 'react-icons/fi';
 
-const CrockeryForm = ({ formData, handleChange, handleSubmit, isEditMode }) => {
+const CrockeryForm = ({
+  formData,
+  handleChange,
+  handleSubmit,
+  isEditMode,
+  isLoading,
+  onCancel,
+  resetKey
+}) => {
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const fileInputRef = useRef();
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    setSelectedFiles(files);
+    handleChange(e); // propagate to parent
+  };
+
+  useEffect(() => {
+    if (resetKey && fileInputRef.current) {
+      fileInputRef.current.value = '';
+      setSelectedFiles([]);
+    }
+  }, [resetKey]);
+
   return (
-    <div className="bg-white shadow-xl rounded-2xl p-4 sm:p-6 md:p-8 w-full max-w-5xl mx-auto mb-12">
-      <h2 className="text-2xl sm:text-3xl font-semibold text-center text-blue-600 mb-6 sm:mb-8">
-        {isEditMode ? 'Update Item' : 'Add New Crockery Item'}
-      </h2>
+    <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+      <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
+        <h2 className="text-lg font-semibold text-gray-800 flex items-center">
+          {isEditMode ? (
+            <>
+              <FiEdit2 className="mr-2 text-indigo-600" />
+              Edit Crockery Product
+            </>
+          ) : (
+            <>
+              <FiPackage className="mr-2 text-indigo-600" />
+              Add New Crockery Product
+            </>
+          )}
+        </h2>
+      </div>
 
-      <form onSubmit={handleSubmit} className="grid gap-6 md:grid-cols-2">
-        <div>
-          <label className="block text-sm font-medium mb-1">Item Name</label>
-          <input
-            type="text"
-            name="name"
-            placeholder="e.g. Ceramic Plate"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-            required
-          />
-        </div>
+      <form onSubmit={handleSubmit} className="p-6 grid gap-6 md:grid-cols-2">
+        <InputField
+          label="Crockery Name"
+          name="name"
+          value={formData.name}
+          handleChange={handleChange}
+          icon={<FiPackage className="text-gray-400" />}
+        />
 
-        <div>
-          <label className="block text-sm font-medium mb-1">Price (₹)</label>
-          <input
-            type="number"
-            name="price"
-            placeholder="e.g. 299"
-            value={formData.price}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-            required
-          />
-        </div>
+        <InputField
+          label="Price (₹)"
+          name="price"
+          type="number"
+          value={formData.price}
+          handleChange={handleChange}
+          icon={<FiDollarSign className="text-gray-400" />}
+        />
 
-        <div>
-          <label className="block text-sm font-medium mb-1">Category</label>
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 bg-white outline-none"
-            required
-          >
-            <option value="">Select category</option>
-            <option value="Plates">Plates</option>
-            <option value="Bowls">Bowls</option>
-            <option value="Cups">Cups</option>
-            <option value="Mugs">Mugs</option>
-            <option value="Glasses">Glasses</option>
-            <option value="Cutlery">Cutlery</option>
-            <option value="Serving Dishes">Serving Dishes</option>
-            <option value="Trays">Trays</option>
-            <option value="Jugs & Pitchers">Jugs & Pitchers</option>
-            <option value="Tea Sets">Tea Sets</option>
-            <option value="Dinner Sets">Dinner Sets</option>
-            <option value="Tureens">Tureens</option>
-            <option value="Condiment Sets">Condiment Sets</option>
-            <option value="Soup Bowls">Soup Bowls</option>
-            <option value="Side Plates">Side Plates</option>
-            <option value="Salad Bowls">Salad Bowls</option>
-            <option value="Saucers">Saucers</option>
-          </select>
-        </div>
+        <SelectField
+          label="Category"
+          name="category"
+          value={formData.category}
+          handleChange={handleChange}
+          options={[
+            'Plates', 'Bowls', 'Cups', 'Mugs', 'Glasses', 'Cutlery', 'Serving Dishes', 'Trays',
+            'Jugs & Pitchers', 'Tea Sets', 'Dinner Sets', 'Tureens', 'Condiment Sets',
+            'Soup Bowls', 'Side Plates', 'Salad Bowls', 'Saucers'
+          ]}
+          icon={<FiTag className="text-gray-400" />}
+        />
 
-        <div>
-          <label className="block text-sm font-medium mb-1">Material</label>
-          <select
-            name="material"
-            value={formData.material}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 bg-white outline-none"
-            required
-          >
-            <option value="">Select material</option>
-            <option value="Ceramic">Ceramic</option>
-            <option value="Porcelain">Porcelain</option>
-            <option value="Bone China">Bone China</option>
-            <option value="Melamine">Melamine</option>
-            <option value="Glass">Glass</option>
-            <option value="Tempered Glass">Tempered Glass</option>
-            <option value="Steel">Stainless Steel</option>
-            <option value="Plastic">Plastic</option>
-            <option value="Bamboo">Bamboo</option>
-            <option value="Wood">Wood</option>
-            <option value="Copper">Copper</option>
-            <option value="Clay/Terracotta">Clay / Terracotta</option>
-            <option value="Stoneware">Stoneware</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
+        <SelectField
+          label="Material"
+          name="material"
+          value={formData.material}
+          handleChange={handleChange}
+          options={[
+            'Ceramic', 'Porcelain', 'Bone China', 'Melamine', 'Glass', 'Tempered Glass', 'Steel',
+            'Plastic', 'Bamboo', 'Wood', 'Copper', 'Clay / Terracotta', 'Stoneware', 'Other'
+          ]}
+          icon={<FiTag className="text-gray-400" />}
+        />
 
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium mb-1">Description</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+            <FiEdit2 className="mr-2 text-gray-400" />
+            Crockery Description
+          </label>
           <textarea
             name="description"
-            rows="3"
-            placeholder="Enter item description..."
+            rows={4}
             value={formData.description}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150"
             required
           />
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium mb-1">Upload Images</label>
-          <input
-            type="file"
-            name="images"
-            accept="image/*"
-            onChange={handleChange}
-            className="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-white file:mr-4 file:py-2 file:px-4
-              file:rounded-lg file:border-0 file:text-sm file:font-semibold
-              file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 h-9"
-            required={!isEditMode}
-          />
+          <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+            <FiImage className="mr-2 text-gray-400" />
+            Upload Image
+          </label>
+          <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+            <div className="space-y-1 text-center">
+              <svg
+                className="mx-auto h-12 w-12 text-gray-400"
+                stroke="currentColor"
+                fill="none"
+                viewBox="0 0 48 48"
+                aria-hidden="true"
+              >
+                <path
+                  d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <div className="flex text-sm text-gray-600">
+                <label
+                  htmlFor="file-upload"
+                  className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500"
+                >
+                  <span>Upload file</span>
+                  <input
+                    id="file-upload"
+                    name="images"
+                    type="file"
+                    className="sr-only"
+                    onChange={handleFileChange}
+                    accept="image/*"
+                    ref={fileInputRef}
+                    required={!isEditMode}
+                  />
+                </label>
+                <p className="pl-1">or drag and drop</p>
+              </div>
+              <p className="text-xs text-gray-500">PNG, JPG up to 5MB</p>
+
+              {/* Show selected file names */}
+              {selectedFiles.length > 0 && (
+                <div className="mt-2 text-sm text-gray-700 text-left">
+                  <strong>Selected File:</strong>
+                  <ul className="list-disc list-inside mt-1">
+                    {selectedFiles.map((file, index) => (
+                      <li key={index}>{file.name}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
-        <div className="md:col-span-2 text-center">
+        <div className="md:col-span-2 flex justify-end space-x-3 pt-2">
+          {isEditMode && (
+            <button
+              type="button"
+              onClick={onCancel}
+              className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              <FiX className="mr-2" />
+              Cancel
+            </button>
+          )}
           <button
             type="submit"
-
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition cursor-pointer"
+            disabled={isLoading}
+            className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+              isLoading ? 'bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700'
+            }`}
           >
-            {isEditMode ? 'Update Crockery' : 'Add Crockery'}
+            {isLoading ? (
+              <>
+                <svg
+                  className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Processing...
+              </>
+            ) : (
+              <>
+                <FiCheck className="mr-2" />
+                {isEditMode ? 'Update Crockery' : 'Add Crockery'}
+              </>
+            )}
           </button>
         </div>
       </form>
     </div>
   );
 };
+
+const InputField = ({ label, name, value, handleChange, type = 'text', icon }) => (
+  <div>
+    <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
+      {label}
+    </label>
+    <div className="mt-1 relative rounded-md shadow-sm">
+      {icon && <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">{icon}</div>}
+      <input
+        type={type}
+        name={name}
+        id={name}
+        value={value}
+        onChange={handleChange}
+        className={`block w-full ${icon ? 'pl-10' : 'pl-3'} pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
+        required
+      />
+    </div>
+  </div>
+);
+
+const SelectField = ({ label, name, value, handleChange, options, icon }) => (
+  <div>
+    <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
+      {label}
+    </label>
+    <div className="mt-1 relative rounded-md shadow-sm">
+      {icon && <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">{icon}</div>}
+      <select
+        name={name}
+        id={name}
+        value={value}
+        onChange={handleChange}
+        className={`block w-full ${icon ? 'pl-10' : 'pl-3'} pr-10 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none bg-white`}
+        required
+      >
+        <option value="">Select {label.toLowerCase()}</option>
+        {options.map((opt) => (
+          <option key={opt} value={opt}>
+            {opt}
+          </option>
+        ))}
+      </select>
+      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+        <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+        </svg>
+      </div>
+    </div>
+  </div>
+);
 
 export default CrockeryForm;

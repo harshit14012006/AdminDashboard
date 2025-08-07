@@ -80,8 +80,8 @@ const Sidebar = () => {
         {/* Navigation */}
         <nav className="mt-6 px-4 space-y-1.5">
           {navLink('/admin-dashboard', FaTachometerAlt, 'Dashboard')}
-          {navLink('/admin-dashboard/add-toys', FaCubes, 'Add Toys')}
-          {navLink('/admin-dashboard/add-crockery', FaUtensils, 'Add Crockery')}
+          {navLink('/admin-dashboard/toys-management', FaCubes, 'Toys Management')}
+          {navLink('/admin-dashboard/crockery-management', FaUtensils, 'Crockery Management')}
           {navLink('/admin-dashboard/view-products', FaPlus, 'View Products')}
           {navLink('/admin-dashboard/settings', FaUserCircle, 'Settings')}
         </nav>

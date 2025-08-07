@@ -1,78 +1,102 @@
 import React from 'react';
 
-const ToysFilter = ({ searchQuery, setSearchQuery }) => {
-  return (
-    <div className="max-w-6xl mx-auto mb-8 px-4 sm:px-0 top-10">
-      <div className="relative max-w-2xl mx-auto">
-        {/* Search Icon */}
-        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-          <svg 
-            className="h-5 w-5 text-gray-500" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={2} 
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
-            />
-          </svg>
-        </div>
+const ToysFilter = ({
+  searchQuery,
+  setSearchQuery,
+  selectedAgeGroup,
+  setSelectedAgeGroup,
+  selectedCategory,
+  setSelectedCategory,
+}) => {
+  const ageGroups = [
+    '0-6 months', '6-12 months', '1-2 years', '2-3 years', '3-5 years',
+    '5-7 years', '6-8 years', '8-10 years', '10-12 years', '12+ years', 'Teens & Adults',
+  ];
 
-        {/* Input Field */}
+  const categories = [
+    'Soft Toys', 'Educational', 'Action Figures', 'Puzzles', 'Outdoor',
+    'Vehicles & Remote Control', 'Building Blocks', 'Musical Toys',
+    'Arts & Crafts', 'Board Games', 'Dolls & Dollhouses', 'Role Play & Pretend Play',
+    'STEM Toys', 'Electronic Toys', 'Bath Toys', 'Sports & Outdoor Games',
+    'Plush Toys', 'Infant Toys', 'Science Kits', 'Construction Toys',
+    'Magic Sets', 'Learning Tablets', 'Wooden Toys', 'Toy Guns & Blasters',
+    'Die-Cast & Collectibles',
+  ];
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 bg-white rounded-lg shadow-md border border-gray-200">
+      {/* Search Bar */}
+      <div className="relative mb-6 w-full">
         <input
           type="text"
-          placeholder="Search toys "
+          placeholder="Search toy by name"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-12 pr-12 py-3.5 text-gray-800 bg-white border border-gray-300 rounded-lg shadow-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-base font-medium hover:border-gray-400"
+          className="w-full pl-12 pr-12 py-3 text-gray-800 bg-gray-50 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base font-medium"
         />
+        {/* Search Icon */}
+        <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+          <svg className="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
 
         {/* Clear Button */}
         {searchQuery && (
           <button
             onClick={() => setSearchQuery('')}
-            className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition-colors duration-150 focus:outline-none focus:text-gray-600"
+            className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-red-500 transition-colors duration-150"
             aria-label="Clear search"
             type="button"
           >
-            <svg 
-              className="h-5 w-5" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
-                d="M6 18L18 6M6 6l12 12" 
-              />
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         )}
       </div>
 
-      {/* Admin Dashboard Info Bar */}
-      {/* <div className="max-w-2xl mx-auto mt-3">
-        <div className="flex items-center justify-between text-sm text-gray-600">
-          <div className="flex items-center space-x-4">
-            <span className="flex items-center">
-              <svg className="h-4 w-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Search across all inventory
-            </span>
-          </div>
-          {searchQuery && (
-            <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs font-medium">
-              Filtering results
-            </span>
-          )}
-        </div> */}
-      
+      {/* Filters Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        {/* Category Filter */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Filter by Category
+          </label>
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white text-gray-700"
+          >
+            <option value="">All Categories</option>
+            {categories.map((category) => (
+              <option key={category} value={category}>{category}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Age Group Filter */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Filter by Age Group
+          </label>
+          <select
+            value={selectedAgeGroup}
+            onChange={(e) => setSelectedAgeGroup(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white text-gray-700"
+          >
+            <option value="">All Age Groups</option>
+            {ageGroups.map((age) => (
+              <option key={age} value={age}>{age}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Optional: Placeholder for future filter */}
+        <div className="hidden lg:block">
+          {/* Example future: Sort by Price / Add Filter */}
+        </div>
+      </div>
     </div>
   );
 };
