@@ -10,6 +10,7 @@ import {
   FaTimes,
   FaSignOutAlt,
   FaChevronRight,
+  FaSlidersH
 } from 'react-icons/fa';
 
 const Sidebar = () => {
@@ -80,6 +81,7 @@ const Sidebar = () => {
         {/* Navigation */}
         <nav className="mt-6 px-4 space-y-1.5">
           {navLink('/admin-dashboard', FaTachometerAlt, 'Dashboard')}
+          {navLink('/admin-dashboard/home-banners', FaSlidersH, 'Homepage Banners')}
           {navLink('/admin-dashboard/toys-management', FaCubes, 'Toys Management')}
           {navLink('/admin-dashboard/crockery-management', FaUtensils, 'Crockery Management')}
           {navLink('/admin-dashboard/view-products', FaPlus, 'View Products')}

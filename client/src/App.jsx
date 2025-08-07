@@ -7,6 +7,7 @@ import AddToys from './toyssection/ToysDashboard';
 import AddCrockery from './crockerysection/CrockeryDashboard';
 import ViewProducts from './pages/ViewProducts';
 import Settings from './pages/Settings';
+import HomepageBanners from './components/HomepageBanners';
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
       {/* Dashboard layout routes */}
       <Route element={<Layout />}>
         <Route path="/admin-dashboard" element={<Dashboard />} />
+        <Route path="/admin-dashboard/home-banners" element={<HomepageBanners />} />
         <Route path="/admin-dashboard/toys-management" element={<AddToys />} />
         <Route path="/admin-dashboard/crockery-management" element={<AddCrockery />} />
         <Route path="/admin-dashboard/view-products" element={<ViewProducts />} />
